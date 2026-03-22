@@ -1,13 +1,15 @@
-import { useGetRecommendMutation } from "@/store/apiSlice";
+import { useLazyGetProductByIdQuery, useGetRecommendMutation } from "@/store/apiSlice";
 import { Send, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react"
+import RecommendedProduct from "./RecommendedProduct";
 
 export default function Chat({isChatOpen, setIsChatOpen}: {isChatOpen: boolean, setIsChatOpen: (value: boolean) => void}) {
-    const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([
+    const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string; product?: any }[]>([
         { role: 'assistant', content: 'Hello! How can I help you with your order today?' }
     ])
     const [input, setInput] = useState('')
     const [getRecommend] = useGetRecommendMutation()
+    const [getProductById] = useLazyGetProductByIdQuery()
     const [isLoading, setIsLoading] = useState(false)
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -24,7 +26,15 @@ export default function Chat({isChatOpen, setIsChatOpen}: {isChatOpen: boolean, 
         try {
             const newHistory = [...messages, userMessage];
             const res = await getRecommend({history: newHistory}).unwrap()
-            setMessages(prev => [...prev, { role: 'assistant', content: res.message }])
+            let productData = undefined;
+            if (res.recommendedId) {
+                try {
+                    productData = await getProductById(res.recommendedId).unwrap();
+                } catch (e) {
+                    console.error("Failed to fetch recommended product", e);
+                }
+            }
+            setMessages(prev => [...prev, { role: 'assistant', content: res.message, product: productData }])
         } catch (err) {
             console.error("Error:", err);
             setMessages(prev => [
@@ -52,10 +62,15 @@ export default function Chat({isChatOpen, setIsChatOpen}: {isChatOpen: boolean, 
             </div>
             <div className='flex-1 overflow-y-auto p-4 space-y-4'>
                 {messages.map((msg, index) => (
-                    <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-[80%] p-3 rounded-lg ${msg.role === 'user' ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-900'}`}>
-                            {msg.content}
+                    <div key={index}>
+                        <div className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                            <div className={`max-w-[80%] p-3 rounded-lg ${msg.role === 'user' ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-900'}`}>
+                                {msg.content}
+                            </div>
                         </div>
+                        {msg.product && (
+                            <RecommendedProduct product={msg.product} />
+                        )}
                     </div>
                 ))}
                 {isLoading && (
