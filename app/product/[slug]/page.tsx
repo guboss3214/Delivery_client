@@ -8,7 +8,7 @@ type Props = {
 }
  
 async function getProduct(id: string) {
-  const res = await fetch(`http://localhost:5001/api/products/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, {
     cache: 'no-store'
   });
   
