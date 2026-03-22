@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function Redirect() {
     const router = useRouter();
-    const [seconds, setSeconds] = useState<number>(25);
+    const [seconds, setSeconds] = useState<number>(5);
 
     useEffect(() => {
         if (seconds === 0) {
