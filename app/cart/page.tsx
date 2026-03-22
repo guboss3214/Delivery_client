@@ -256,11 +256,7 @@ export default function CartPage() {
                   onClick={() => dispatch(clearCart())}
                   className="mt-4 w-full bg-red-500 hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-4 rounded-xl font-bold tracking-wide transition-colors flex justify-center items-center"
                 >
-                  {isSubmitting ? (
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  ) : (
-                    'Clear Cart'
-                  )}
+                  Clear Cart
                 </button>
               </form>
             </div>
