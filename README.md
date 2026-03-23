@@ -4,6 +4,8 @@ This directory contains the Next.js (App Router) application for the Food Delive
 
 🌍 **Live Demo:** [https://delivery-client-wheat.vercel.app/](https://delivery-client-wheat.vercel.app/)
 
+**Server Repo:** [https://github.com/guboss3214/Delivery_server](https://github.com/guboss3214/Delivery_server)
+
 ## 🚀 Advanced Level Features
 - **Redux Toolkit**: Centralized state management with `redux-persist` for `localStorage` persistence.
 - **Infinite Scroll**: Seamless product pagination on the Shops page.
