@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Eliftech Test Task",
-  description: "Test task 4 Eliftech",
+  title: "Test Task",
+  description: "Test task",
 };
 
 export default function RootLayout({
